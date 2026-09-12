@@ -1,15 +1,23 @@
+name: Test RapidAPI Endpoint
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: # এটি দিয়ে ম্যানুয়ালি রান করা যাবে
+
 jobs:
   test-api:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Test RapidAPI Endpoint
+      - name: Send API Request
         env:
           RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
         run: |
-          curl --request POST \
+          response=$(curl --silent --show-error --fail --request POST \
             --url https://chatgpt-42.p.rapidapi.com/conversationgpt4-2 \
             --header 'Content-Type: application/json' \
-            --header "x-rapidapi-host: chatgpt-42.p.rapidapi.com" \
+            --header 'x-rapidapi-host: chatgpt-42.p.rapidapi.com' \
             --header "x-rapidapi-key: $RAPIDAPI_KEY" \
             --data '{
               "messages": [{"role": "user", "content": "hello"}],
@@ -19,5 +27,7 @@ jobs:
               "top_p": 0.9,
               "max_tokens": 256,
               "web_access": false
-            }'
-            
+            }')
+
+          echo "API Response:"
+          echo "$response"
