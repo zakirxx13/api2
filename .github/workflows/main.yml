@@ -1,0 +1,23 @@
+jobs:
+  test-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test RapidAPI Endpoint
+        env:
+          RAPIDAPI_KEY: ${{ secrets.RAPIDAPI_KEY }}
+        run: |
+          curl --request POST \
+            --url https://chatgpt-42.p.rapidapi.com/conversationgpt4-2 \
+            --header 'Content-Type: application/json' \
+            --header "x-rapidapi-host: chatgpt-42.p.rapidapi.com" \
+            --header "x-rapidapi-key: $RAPIDAPI_KEY" \
+            --data '{
+              "messages": [{"role": "user", "content": "hello"}],
+              "system_prompt": "",
+              "temperature": 0.9,
+              "top_k": 5,
+              "top_p": 0.9,
+              "max_tokens": 256,
+              "web_access": false
+            }'
+            
